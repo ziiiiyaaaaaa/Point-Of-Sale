@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+    <title>Make up Store Emina</title>
+
+    <style>
+        .jumbotron {
+           background-color: pink;
+           font-weight: bold;
+           color: blue;
+        }
+
+        .jumbotron p{
+            font-style: italic;
+            font-weight: lighter;
+        }
+
+        .judullist { 
+            height: 50px;
+        }
+       
+    </style>
+</head>
+<body>
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4"><b> Make Up Store Emina </b></h1>
+            <p class="lead">You Can Now Do All Transactions Here !</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <div class="judullist bg-primary rounded text-center text-white pt-2">List Item</div>
+                
+                <div class="listkeranjang" id="listkeranjang">
+                    
+                </div>
+                
+                <table width="100%">
+                    <tbody>
+                        <tr>
+                            <td>Discount (5%)</td>
+                            <td>Rp <span id="discount"></span></td>
+                        </tr>
+                        <tr>
+                            <td>PPN (10%)</td>
+                            <td>Rp <span id="pajak"></span></td>
+                        </tr>
+                        <tr class="bg-dark text-white">
+                            <td>Total Bayar</td>
+                            <td>Rp <span id="totalbayar"></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+                <button type="button" class="btn btn-primary mt-3 btn-block" onclick="add()">Bayar</button>
+            </div>
+    
+            <div class="col-8" id="listproduk">
+            
+            </div>
+
+            <div class="container text-center">
+                <table class="table table-bordered mt-4" style="background-color: royalblue;">
+                    <thead>
+                    <tr>
+                        <th scope="col">No</th>
+                        <th scope="col">Nama Produk</th>
+                        <th scope="col">Discount</th>
+                        <th scope="col">Pajak</th>
+                        <th scope="col">Total Bayar</th>
+                        <th scope="col">Modify</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tampildata">
+                
+                    </tbody>
+                </table>
+
+            <script>
+               var namabarang = ['Pressed Blush','Cream Blush','Chic CC Cake','Glossy Stain','Creamatte Metallic','Eye Shadow',
+               'Aqua Mascara','Body Mist Pixie Dust','Mineral Cushion',
+               'Bright Stuff Face Toner','Body Mist Ocean Mist','Aloe Vera Hand Spray',
+               'Tinted Balm','Crayon Pour','SKin FaceToner','Cleansing Lotion','Apricot Face Scrub','Pimple Acne',
+               'Power Face Toner','Sugar Lip Scrub']
+               var hargabarang = [40000,30000,55000,50000,50000,40000,50000,25000,125000,30000,20000,23000,20000,63000,28000,23000,26000,26000,28000,29000]
+               var gambarbarang = [
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/makeup/cover_w236_h255_thumb-cheeklit-pressed-blush---violet-berry---close.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/makeup/cover_w236_h255_thumb-cheeklit-cream-blush---nudie-brown---tube.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/makeup/cover_w236_h255_thumb-city-chic-cc-cake---with-box---latte.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/glossy-stain/cover_w236_h255_glossy-stain---apple-shower---with-box.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/creammatte-metallic/cover_w236_h255_creamatte-metallic_gabung_edit-02-sunset-sparks-ok.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/pop-rouge/cover_w236_h255_pop-rouge---posh---open.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/eye/cover_w236_h255_starlash-aqua-mascara-.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/other/cover_w236_h255_thumb-Body-Mist-Pixie-Dust-10-ml.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/makeup/cover_w236_h255_thumb-bwm-cushion---04-mocca---unit-box.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/toner/bright-stuff/cover_w236_h255_img_0023_bright-stuff-face-toner-depan_edit-ok.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/other/cover_w236_h255_thumb-Body-Mist-Ocean-Mist-10-ml.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/other/cover_w236_h255_thumb-emina-aloe-vera-hand-spray-100ml.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/lip/cover_w236_h255_thumb-PINK-BONBONS.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/crayon-pour-les-yeux/cover_w236_h255_eye-do-crayon-pour-les-yeux-black---unit-box.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/cover_w236_h255_img_0111_skin-buddy-face-toner_edit-ok.jpg",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/cleanser/cover_w236_h255_thumb-Creamy-Milk-Cleansing-Lotion.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/cleanser/cover_w236_h255_thumb-Apricot-jam-face-scrub.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/serum/cover_w236_h255_thumb-Ms-Pimple-Spot-Gel---tube.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/toner/cover_w236_h255_thumb-witch-power.png",
+               "https://www.eminacosmetics.com/cfind/source/thumb/images/product/lip-care/cover_w236_h255_thumb-SUGAR-RUSH-LIP-SCRUB-OPEN.png"
+               ]
+
+               
+                var listproduk = document.getElementById('listproduk')
+
+                var namabarang_keranjang = []
+                var hargabarang_keranjang = []
+
+                function showproduk() {
+                    listproduk.innerHTML =''
+                    
+                    for(let i = 0; i < namabarang.length; i++) {
+                    listproduk.innerHTML += '<div class="card float-left mr-3 mb-2 mt-1" style="width: 8rem;">'+
+                    '<img src="'+gambarbarang[i]+'" class="card-img-top" alt="...">'+
+                    '<div class="card-body">'+
+                        '<h6 class="card-title text-center">'+namabarang[i]+'</h6>'+
+                        '<p class="card-text text-center">Rp. '+hargabarang[i]+'</p>'+
+                        '<a href="#" class="btn btn-primary mt-3 btn-block" onclick="addlistitem('+i+')">Beli <svg width="1em" height="2em" viewBox="0 0 16 16" class="bi bi-cart-fill" fill="currentColor"xmlns="http://www.w3.org/2000/svg">'+
+                            '<path fill-rule="evenodd" d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>'+'</svg></a>'+
+                    '</div>'+
+                '</div>'
+                
+                    }
+                }
+                showproduk()
+
+                function addlistitem(id) {
+                    namabarang_keranjang.push(namabarang[id])
+                    hargabarang_keranjang.push(hargabarang[id])
+                
+                showkeranjang()
+
+                }
+
+                var listkeranjang = document.getElementById('listkeranjang')
+                var tampilandiscount = document.getElementById('discount')
+                var tampilanpajak = document.getElementById('pajak')
+                var tampilantotalbayar = document.getElementById('totalbayar')
+
+
+                var discountt 
+                var pajakkk
+                var hargatotal 
+                var totalbayar 
+                var totalbelanja
+
+                function showkeranjang() {
+                    listkeranjang.innerHTML =''
+
+                    var discount = 0
+                    var pajak = 0
+                    var hargatotal = 0
+                    var totalbayar = 0
+                    
+                    for (let i = 0; i < namabarang_keranjang.length; i++) {
+                        listkeranjang.innerHTML += '<div class="card mt-4 mb-4" style="width: 22rem;">'+
+                        '<div class="card-body">'+
+                            '<h5 class="card-title">'+namabarang_keranjang[i]+'</h5>'+
+                            '<p class="card-text">'+hargabarang_keranjang[i]+'</p>'+
+                            '<p>Quantity = 1</p>'+
+                            '<a href="#" class="btn btn-danger float-right" onclick="deleteitem('+i+')">Hapus</a>'+
+                        '</div>'+
+                    '</div>'
+
+                    hargatotal = hargabarang_keranjang[i]+hargatotal
+
+                    totalbayar = hargatotal;
+
+                    if(totalbayar>150000) {
+                        discountt = totalbayar*0.05
+                    }else{
+                        discountt = 0
+                    }
+
+                    totalbayar = hargatotal - discountt 
+
+                    pajakkk = totalbayar*0.1
+                    
+                    totalbelanja = totalbayar + pajakkk
+                    
+                    tampilanpajak.innerHTML = (new Intl.NumberFormat('de-DE').format(pajakkk))
+                    tampilandiscount.innerHTML = (new Intl.NumberFormat('de-DE').format(discountt))
+                    tampilantotalbayar.innerHTML = (new Intl.NumberFormat('de-DE').format(totalbelanja))
+                    }
+                }
+
+
+                function deleteitem(id) {
+                    namabarang_keranjang.splice(id,1)
+                    hargabarang_keranjang.splice(id,1)
+
+                    showkeranjang()
+                }
+                
+
+                var namabrg = []
+                var hargabrg = []
+                var diskon = []
+                var pajakk = []
+                var total = []
+
+                var tampil = document.getElementById('tampildata')
+
+                function show() {
+                tampil.innerHTML = ""
+
+                for(i = 0;i < namabrg.length; i++) {
+                const nodata = i+1
+                    tampil.innerHTML += "<tr>" +
+                    "<td>" + nodata + "</td>" +
+                    "<td>" + namabrg[i] + "</td>" +
+                    "<td>Rp. " + (new Intl.NumberFormat('de-DE').format(diskon[i])) + "</td>" +
+                    "<td>Rp. " + (new Intl.NumberFormat('de-DE').format(pajakk[i])) + "</td>" +
+                    "<td>Rp. " + (new Intl.NumberFormat('de-DE').format(total[i])) + "</td>" +
+                    "<td>" +
+                        '<button class="btn btn-danger" onclick="hapus('+i+')">Hapus</button>'+
+                    "</td>" +
+                    "</tr>"
+
+
+                }
+            }
+                show()
+
+                function add() {
+                    namabrg.push(namabarang_keranjang)
+                    hargabrg.push(hargabarang_keranjang)
+                    diskon.push(discountt)
+                    pajakk.push(pajakkk)
+                    total.push(totalbelanja)
+
+                    listkeranjang.innerHTML = '';
+                    namabarang_keranjang = [];
+                    hargabarang_keranjang = [];
+
+                    tampilanpajak.innerHTML = (new Intl.NumberFormat('de-DE').format(0));
+                    tampilandiscount.innerHTML = (new Intl.NumberFormat('de-DE').format(0));
+                    tampilantotalbayar.innerHTML = (new Intl.NumberFormat('de-DE').format(0));
+
+                    show()
+                }
+
+                function hapus(id) {
+                    namabrg.splice(id,1)
+                    hargabrg.splice(id,1)
+                    diskon.splice(id,1)
+                    pajakk.splice(id,1)
+                    total.splice(id,1)
+
+                    show()
+                }
+
+                var baru = []
+
+                function simpan() {
+                    var namasimpan = namabarang_keranjang
+                    var hargasimpan = hargabarang_keranjang
+                    var diskonsimpan = discountt
+                    var pajaksimpan = pajakkk
+                    var totalsimpan = totalbelanja
+
+                    namabrg[baru] = namasimpan
+                    hargabrg[baru] = hargasimpan
+                    diskon[baru] = diskonsimpan
+                    pajakk[baru] = pajaksimpan
+                    total[baru] = totalsimpan
+
+                    show()
+                    baru.pop()
+                }
+            </script>
+        
+
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</body>
+</html>
